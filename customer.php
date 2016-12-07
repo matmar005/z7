@@ -29,21 +29,8 @@ $pass=$_POST['pass_cust']; // hasło z formularza
   else{$error2=false;}
   // if there's no error, continue to login
   if ($error1==false && $error2==false) {
-   
- 
-   $sql="SELECT * FROM users WHERE user='$user'";
-$result = $conn->query($sql);
-if ($result->num_rows == 1 ) {
-    while($row = $result->fetch_assoc()) {
-		$mail=$row["user"];
-        if($row['pass']==$pass) {
-		echo "<h2>Witamy ".$row['Imie']." ".$row[Nazwisko]."</h2>";
-
-		$browser_type = $_SERVER['HTTP_USER_AGENT'];
-
-		$ip = $_SERVER["REMOTE_ADDR"];
-		echo "<br>Adres IP hosta: ".$ip;
-
+$ip = $_SERVER["REMOTE_ADDR"];
+		
 //okreslanie geolokalizacji za pomoca strony www
 
 function ip_details($ip) {
@@ -53,10 +40,46 @@ return $details;
 }
 $details = ip_details($ip);
 $COUNTRY=$details -> country; 
-echo $COUNTRY;
+
+   
+   $conn2 = new mysqli($servername, $username, $password, $dbname);
+// Check DB connection
+if ($conn2->connect_error) {
+    die("Connection failed: " . $conn2->connect_error);
+}   
+   
+   $sql="SELECT * FROM users WHERE user='$user'";
+$result = $conn->query($sql);
+if ($result->num_rows == 1 ) {
+    while($row = $result->fetch_assoc()) {
+		$userdb=$row["user"];
+        if($row['pass']==$pass) {
+		echo "<h2>Witamy ".$row['Imie']." ".$row[Nazwisko]."</h2>";
+
+		echo "<br>Adres IP hosta: ".$ip;
+
+$sql2 = "INSERT INTO logi (stan, user, ip, lok) VALUES ('1','$userdb' ,'$ip', '$COUNTRY')";
+if ($conn2->query($sql2) === TRUE) {
+    //echo "Record updated successfully";
+$conn2->close();
+	} else {
+    echo "Error updating record: " . $conn2->error;
+$conn2->close();
+	}
+
 		
    } else {
    echo "Incorrect Credentials, Try again...";
+   
+$sql2 = "INSERT INTO logi (stan, user, ip, lok) VALUES ('0','$userdb' ,'$ip', '$COUNTRY')";
+if ($conn2->query($sql2) === TRUE) {
+    //echo "Record updated successfully";
+$conn2->close();
+	} else {
+    echo "Error updating record: " . $conn2->error;
+$conn2->close();
+	}
+   
    }
     }
   }
