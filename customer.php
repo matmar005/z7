@@ -95,8 +95,35 @@ echo "Time".$row3["time"];
 	<input type="file" name="plik"/> 
 <input type="submit" value="Wyslij plik"/>
  </form> 
-	
+
+
+<form action="download.php" method="POST">
+<select name="plik">
 <?	
+		
+	$dir = "/home/matizjezior/ftp/z7/".$userdb;
+
+// Open a directory, and read its contents
+if (is_dir($dir)){
+  if ($dh = opendir($dir)){
+    while (($file = readdir($dh)) !== false){
+      
+	  
+	  echo "<option value='".$file."-".mime_content_type($dir."/".$file)."'>".$file."</option>";
+    }
+    closedir($dh);
+  }
+   
+}
+
+?>
+</select>
+<input type="submit" value="Pobierz plik"/>
+ </form> 
+
+
+<?	
+		
 		
    } else {
    echo "Incorrect Credentials, Try again...<br>";
