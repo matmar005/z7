@@ -88,6 +88,15 @@ echo "Time".$row3["time"];
 		$conn3->close();
 		}
 	
+?>	
+<br>Dodanie pliku<br>
+	<form action="odbierz.php" method="POST" ENCTYPE="multipart/form-data"> 
+<input name="cat" type="text" value="<?echo $userdb;?>"/>
+	<input type="file" name="plik"/> 
+<input type="submit" value="Wyslij plik"/>
+ </form> 
+	
+<?	
 		
    } else {
    echo "Incorrect Credentials, Try again...<br>";
