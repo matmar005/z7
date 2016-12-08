@@ -32,6 +32,8 @@ Login customer:<input type="text" name="user_cust" maxlength="20" size="20" styl
 Hasło:         <input type="password" name="pass_cust" maxlength="20" size="20" style="position: absolute;left: 106px;"><br>
 <input type="submit" value="Customer Login" style="position: absolute;left: 100px;"/>
 </form>
+
+
 </div>
 
 
