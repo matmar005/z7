@@ -47,6 +47,11 @@ $COUNTRY=$details -> country;
 if ($conn2->connect_error) {
     die("Connection failed: " . $conn2->connect_error);
 }   
+      $conn3 = new mysqli($servername, $username, $password, $dbname);
+// Check DB connection
+if ($conn3->connect_error) {
+    die("Connection failed: " . $conn3->connect_error);
+}   
    
    $sql="SELECT * FROM users WHERE user='$user'";
 $result = $conn->query($sql);
@@ -67,9 +72,25 @@ $conn2->close();
 $conn2->close();
 	}
 
+	   $sql3="select * from logi where stan='0' and user='$userdb'
+   and time > SUBDATE( CURRENT_TIMESTAMP, INTERVAL 30 Minute)
+order by id DESC
+Limit 1";
+$result3 = $conn3->query($sql3);
+if ($result3->num_rows > 0 ) {
+	 while($row3 = $result3->fetch_assoc()){
+echo "<br> Nastąpiła nieudana próba logowania <br>";
+echo "IP:".$row3["ip"]."<br>";
+echo "Lokalizacja:".$row3["lok"]."<br>";
+echo "Time".$row3["time"];
+		
+		}
+		$conn3->close();
+		}
+	
 		
    } else {
-   echo "Incorrect Credentials, Try again...";
+   echo "Incorrect Credentials, Try again...<br>";
    
 $sql2 = "INSERT INTO logi (stan, user, ip, lok) VALUES ('0','$userdb' ,'$ip', '$COUNTRY')";
 if ($conn2->query($sql2) === TRUE) {
@@ -79,6 +100,18 @@ $conn2->close();
     echo "Error updating record: " . $conn2->error;
 $conn2->close();
 	}
+
+   
+   
+   $sql3="select * from logi where stan='0' and user='$userdb'
+   and time > SUBDATE( CURRENT_TIMESTAMP, INTERVAL 30 Minute)
+order by id DESC
+Limit 3";
+$result3 = $conn3->query($sql3);
+if ($result3->num_rows == 3 ) {
+echo $userdb." zablokowany!! <br>";
+		$conn3->close();
+		}
    
    }
     }
